@@ -1,0 +1,231 @@
+## FASE 3 — SECUENCIA COMPLETA DE PROMPTS PARA CLAUDE CODE
+
+### ─── PROMPT 1: Orientación inicial ───
+```
+Lee el archivo CLAUDE.md completo y dime que entendiste del proyecto SaludSV Pro: 
+cuántos archivos debes crear, cuántas hojas tiene el Excel, y cuál es el objetivo 
+del proyecto. No generes código todavía.
+```
+
+**Espera a que Claude confirme que entendió el proyecto antes de continuar.**
+
+---
+
+### ─── PROMPT 2: Crear estructura base y funciones auxiliares ───
+```
+Crea el archivo salud_sv_pro.py con:
+1. Todas las importaciones necesarias (openpyxl, icalendar, datetime, os, sys, pytz)
+2. Todas las constantes de colores definidas en CLAUDE.md (COLOR_PRIMARIO, ALERTA_ROJO, etc.)
+3. Todas las funciones auxiliares: make_fill, make_font, make_border, make_alignment, 
+   apply_header_style, apply_col_header, add_dropdown, set_banner
+4. La función main() con la estructura básica (sin el contenido de cada hoja todavía)
+5. El bloque if __name__ == '__main__': main()
+
+Asegúrate que el archivo sea ejecutable sin errores, aunque las funciones de hojas 
+aún no existan.
+```
+
+---
+
+### ─── PROMPT 3: Crear hoja INICIO ───
+```
+Implementa la función crear_hoja_inicio(wb) completa según las especificaciones 
+del CLAUDE.md:
+- Banner principal verde oscuro con merge A1:H3
+- Bloque de datos del paciente (filas 5-15, columnas A:D) con todos los campos, 
+  dropdowns y la fórmula de edad
+- Bloque de alertas activas (filas 5-15, columnas F:H) con fondo amarillo claro
+- Tabla de alergias (filas 17-22)
+- Tabla de condiciones crónicas (filas 24-29)
+- Color de pestaña #1B6B3A
+- Sin líneas de cuadrícula
+- Zoom 90%
+Agrega la llamada a crear_hoja_inicio(wb) en la función main().
+```
+
+---
+
+### ─── PROMPT 4: Crear hoja CITAS MÉDICAS ───
+```
+Implementa la función crear_hoja_citas(wb) completa:
+- Banner azul oscuro (#0F4C8A) con las instrucciones de colores
+- Tabla de citas desde fila 4 con las 11 columnas del CLAUDE.md
+- Todos los dropdowns: ESPECIALIDAD (lista completa de 22 opciones) y ESTADO
+- Las 3 citas de ejemplo con fechas relativas (hoy+7, hoy+14, hoy+30)
+- Formato condicional para colorear filas enteras según ESTADO y FECHA:
+  * Rojo: Cancelada
+  * Gris: Completada
+  * Naranja: mañana o pasado mañana
+  * Verde: pendiente y fecha >= hoy+3
+  * Amarillo brillante: cita hoy
+- Fila de total de gastos al final
+- Autofilter, freeze headers, landscape printing
+- Color de pestaña #0F4C8A
+La función debe retornar la lista de citas (para generar los .ics después).
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 5: Crear hoja MEDICAMENTOS ───
+```
+Implementa la función crear_hoja_medicamentos(wb) completa:
+- Banner rojo (#C0392B) con guía de colores
+- Tabla con las 16 columnas del CLAUDE.md (columnas A:P)
+- Todos los dropdowns: PRESENTACIÓN (12 opciones), VÍA (11 opciones), 
+  FRECUENCIA (9 opciones), TOMAR CON (7 opciones), ES CRÓNICO (Sí/No)
+- Fórmula de DÍAS RESTANTES en columna K para filas 5-54
+- Los 3 medicamentos de ejemplo pre-llenados
+- Formato condicional basado en columna K:
+  * Rojo intenso: <= 3 días (URGENTE - toda la fila)
+  * Naranja: <= 7 días
+  * Amarillo: <= 14 días
+  * Verde: > 14 días
+- Panel de horario del día en columnas R:U
+- Color de pestaña #C0392B
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 6: Crear hoja EJERCICIOS ───
+```
+Implementa la función crear_hoja_ejercicios(wb) completa:
+- Banner morado (#8E44AD)
+- Panel de info de rutina (filas 4-10) con:
+  * Los 6 campos del CLAUDE.md incluyendo las fórmulas de semana actual y fecha de cambio
+  * Celda de alerta dinámica (roja si <= 7 días, naranja si <= 14, verde si > 14)
+- Tabla de ejercicios desde fila 12 con las 10 columnas
+- Los 10 ejercicios de ejemplo de la rutina full body
+- Dropdown de GRUPO MUSCULAR (14 opciones)
+- Dropdown de COMPLETADO HOY (Sí/No/-)
+- Tabla de seguimiento mensual (4 semanas x 7 días) desde fila 25
+- Color de pestaña #8E44AD
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 7: Crear hoja DIETA ───
+```
+Implementa la función crear_hoja_dieta(wb) completa:
+- Banner verde oscuro (#1E8449)
+- Panel de metas nutricionales diarias (filas 4-8)
+- Plan semanal de comidas (Lunes a Domingo) con columnas:
+  DÍA | DESAYUNO | SNACK AM | ALMUERZO | SNACK PM | CENA | AGUA | NOTA
+- Datos completos del Lunes como ejemplo
+- Dropdown de vasos de agua (1 al 10)
+- Tabla nutricional de referencia salvadoreña en columnas I:N con 
+  EXACTAMENTE los 20 alimentos del CLAUDE.md con sus valores nutricionales
+- Color de pestaña #27AE60
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 8: Crear hoja HISTORIAL CLÍNICO ───
+```
+Implementa la función crear_hoja_historial(wb) completa:
+- Banner gris oscuro (#2C3E50)
+- Sección 1: Datos médicos básicos con fórmulas de IMC y clasificación OMS,
+  y formato condicional en la celda de IMC (azul/verde/amarillo/rojo)
+- Sección 2: Tabla de seguimiento de signos vitales con 5 registros de ejemplo
+  de los últimos 5 meses (variación realista)
+- Sección 3: Registro de vacunas con 4 vacunas comunes en El Salvador
+- Sección 4: Tabla de cirugías (vacía, solo estructura)
+- Sección 5: Antecedentes familiares con los 7 familiares predefinidos
+- Sección 6: Tabla de médicos tratantes con dropdown de frecuencia de visita
+- Color de pestaña #2C3E50
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 9: Crear hoja INSTRUCCIONES ───
+```
+Implementa la función crear_hoja_instrucciones(wb) completa:
+- Banner oscuro grande y elegante
+- Sección explicativa para cada uno de los 6 módulos (con el color de cada módulo)
+- Tabla visual de guía de colores (usando fondos de celda como muestras de color)
+- Pasos numerados para importar citas a Google Calendar
+- Caja de recomendaciones con los 5 puntos del CLAUDE.md
+- Pie de página con créditos
+- Color de pestaña #7F8C8D
+Agrega la llamada en main().
+```
+
+---
+
+### ─── PROMPT 10: Implementar generación de archivos .ics ───
+```
+Implementa la función generar_ics() exactamente como está especificada en 
+el CLAUDE.md, usando la librería icalendar con pytz para la zona horaria 
+America/El_Salvador.
+
+La función debe:
+- Recibir los datos de la cita como parámetros
+- Crear un evento de 1 hora de duración
+- Agregar 2 alarmas: 1 día antes y 2 horas antes
+- Guardar el archivo como cita_001.ics, cita_002.ics, cita_003.ics
+
+Actualiza la función main() para generar los 3 archivos .ics usando los 
+datos de las citas de ejemplo que retorna crear_hoja_citas().
+```
+
+---
+
+### ─── PROMPT 11: Generar README y prueba final ───
+```
+1. Implementa la función generar_readme(output_dir) que cree el archivo README.md 
+   en la carpeta output/ con el contenido del CLAUDE.md.
+
+2. Revisa la función main() completa y verifica que:
+   - Las 7 hojas se crean en el orden correcto
+   - La hoja activa al abrir sea "🏥 INICIO"
+   - Se crean las carpetas output/ y output/calendario/
+   - Se imprimen mensajes de progreso claros en consola
+
+3. Ejecuta el script y dime si hay algún error:
+   python salud_sv_pro.py
+```
+
+---
+
+### ─── PROMPT 12: Corrección de errores (si los hay) ───
+```
+El script generó los siguientes errores: [PEGA AQUÍ EL ERROR]
+Corrígelos sin cambiar la funcionalidad ya implementada.
+```
+
+---
+
+### ─── PROMPT 13: Revisión de calidad ───
+```
+Verifica que el archivo SaludSV_Pro.xlsx generado cumple TODOS estos criterios:
+1. ¿Tiene exactamente 7 hojas con los nombres correctos (con emojis)?
+2. ¿Cada pestaña tiene su color correcto?
+3. ¿La hoja INICIO se muestra primero al abrir?
+4. ¿Los dropdowns funcionan en CITAS (especialidad, estado)?
+5. ¿Los dropdowns funcionan en MEDICAMENTOS (presentación, frecuencia)?
+6. ¿La fórmula de DÍAS RESTANTES en MEDICAMENTOS calcula valores?
+7. ¿El formato condicional de MEDICAMENTOS colorea correctamente con los datos de ejemplo?
+8. ¿La fórmula de días para cambio de rutina muestra un número?
+9. ¿La tabla nutricional tiene los 20 alimentos salvadoreños?
+10. ¿Se generaron 3 archivos .ics en output/calendario/?
+
+Si algo falla, corrígelo.
+```
+
+---
+
+### ─── PROMPT 14: Pulido final de presentación ───
+```
+Haz estos ajustes finales de presentación para que el archivo se vea profesional:
+1. Verifica que NINGUNA hoja tenga líneas de cuadrícula visibles
+2. Confirma que todas las columnas tienen el ancho correcto (no texto cortado)
+3. Asegura que todos los textos de encabezado estén centrados
+4. Verifica que los datos de ejemplo en CITAS muestren fechas futuras reales
+5. Ajusta el alto de las filas de datos a 20px en todas las hojas
+6. Agrega un borde exterior elegante (#BDC3C7) a todas las tablas de datos
+7. Confirma que el banner de cada hoja se ve correctamente con el texto centrado
+```
