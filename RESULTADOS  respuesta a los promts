@@ -1,0 +1,14 @@
+promt 1
+El proyecto es bastante ambicioso: paleta de 14 colores exactos, formatos condicionales por fila, dropdowns con listas largas (requieren hoja auxiliar oculta _aux_listas), fórmulas Excel embebidas en celdas, y generación de 3 archivos .ics con alarmas dobles para Google Calendar. ¿Procedo a generar el código?
+
+promt 2
+ Opened changes in Visual Studio Code ⧉
+ salud_sv_pro.py
+ Save file to continue…
+
+ Do you want to create salud_sv_pro.py?
+ ❯ 1. Yes
+   2. Yes, allow all edits during this session (shift+tab)
+   3. No
+
+promt 3
