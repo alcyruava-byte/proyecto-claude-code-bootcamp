@@ -1,0 +1,16 @@
+##: Instalar dependencias Python
+```bash
+# En la terminal de VS Code (Ctrl+` para abrirla)
+pip install -r requirements.txt
+# Si usas pip3:
+pip3 install -r requirements.txt
+# Si hay conflictos, usa:
+pip install openpyxl icalendar pytz python-dateutil
+```
+
+Verifica la instalación:
+```bash
+python -c "import openpyxl; import icalendar; import pytz; print('Todo OK')"
+```
+
+TODO INSTALADO CORRECTAMENTE
